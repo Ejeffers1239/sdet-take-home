@@ -33,11 +33,7 @@ describe("Portfolio Dashboard", () => {
 
   it("renders mocked portfolios from a stubbed API (component-style)", () => {
     // We stub GET /api/portfolios so the UI renders fixture data independent of
-    // the backend. BUG: the intercept is registered AFTER cy.visit, so the
-    // request fired during page load is never stubbed — the UI shows the real
-    // seeded data instead of the mock, and this assertion fails. Register the
-    // intercept BEFORE visiting.
-    cy.visit("/");
+    // the backend.
     cy.intercept("GET", "/api/portfolios", {
       statusCode: 200,
       body: [
@@ -51,6 +47,8 @@ describe("Portfolio Dashboard", () => {
         },
       ],
     }).as("list");
+    cy.visit("/");
+
 
     cy.contains('[data-cy="portfolio-name"]', "Mocked Fund");
     cy.get('[data-cy="portfolio"]').should("have.length", 1);
