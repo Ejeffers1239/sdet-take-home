@@ -56,23 +56,35 @@ describe("Portfolio Dashboard", () => {
 
   it("creates a portfolio and confirms the saved status", () => {
     // The create POST resolves after a short delay; the UI shows "Saving…" then
-    // "Saved". BUG: this reads the status text into a variable inside a .then()
-    // (async) but asserts on it synchronously (outside the command chain), so
-    // the assertion runs before the value is set — and before the request has
-    // even resolved. Fix by waiting on the create request (cy.intercept alias)
-    // and asserting inside the Cypress chain — not with a fixed cy.wait sleep.
+    // "Saved".
+
+    //setup intercepts
+    cy.intercept("POST", "/api/portfolios").as("waitOnPost");
+    cy.intercept("GET", "/api/portfolios", ).as("waitOnPageReload");
+    
     cy.visit("/");
 
     cy.get('[data-cy="name-input"]').type("Tactical Fund C");
     cy.get('[data-cy="cash-input"]').clear().type("15000");
     cy.get('[data-cy="create-submit"]').click();
 
-    let statusText: string | undefined;
-    cy.get('[data-cy="status"]').then(($el) => {
-      statusText = $el.text();
-    });
 
-    // Runs synchronously, before the .then above — statusText is undefined.
-    expect(statusText).to.eq("Saved");
+    //the nested wait is likely overkill here, 
+    //waiting for JUST the page reload is sufficent for most cases
+    //but, doing it this way is covering stray reloads by ensuring the synchronous
+    //logic of looking for the GET request that happens after the POST from submitting
+    cy.wait("@waitOnPost").then(() =>{
+      cy.wait("@waitOnPageReload").then(() => {
+        let statusText: string | undefined;
+        cy.get('[data-cy="status"]').then(($el) => {
+          //wait on both relevant requests triggered by the submit button
+          //cy.wait("waitOnPost");
+          //cy.wait("waitOnPageReload");
+          statusText = $el.text();
+          expect(statusText).to.eq("Saved");
+        });
+      });
+    });
+    
   });
 });
