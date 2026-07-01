@@ -6,6 +6,7 @@
 // job in Part 1 is to make the suite green AND correct: fix tests where the
 // test is wrong, and the app where the app is wrong. Record what you find in
 // FINDINGS.md.
+import {mockGetPortfolios} from "../support/helper.cy"
 
 describe("Portfolio Dashboard", () => {
   beforeEach(() => {
@@ -34,26 +35,39 @@ describe("Portfolio Dashboard", () => {
   it("renders mocked portfolios from a stubbed API (component-style)", () => {
     // We stub GET /api/portfolios so the UI renders fixture data independent of
     // the backend.
-    cy.intercept("GET", "/api/portfolios", {
-      statusCode: 200,
-      body: [
-        {
-          id: 99,
-          name: "Mocked Fund",
-          cashBalance: 1000,
-          totalValue: 1000,
-          totalPnl: 0,
-          positions: [],
-        },
-      ],
-    }).as("list");
+
+    // My helper function "mockGetPortfolios" replaces the commented out cy.intercept below. 
+    // The assert is only checking for name, so I omitted the other nullable fields to show the use of the function.
+    mockGetPortfolios(
+      [{
+        id: 99, 
+        name: "Mocked Fund",
+        cashBalance: 1000,
+        totalValue: 1000,
+        totalPnl: 0,
+        positions: []
+      }]);
+
+  //  cy.intercept("GET", "/api/portfolios", {
+  //    statusCode: 200,
+  //    body: [
+  //      {
+  //        id: 99,
+  //        name: "Mocked Fund",
+  //        cashBalance: 1000,
+  //        totalValue: 1000,
+  //        totalPnl: 0,
+  //        positions: [],
+  //      },
+  //    ],
+  //  }).as("list");
+  //  
+  //});
+
     cy.visit("/");
-
-
     cy.contains('[data-cy="portfolio-name"]', "Mocked Fund");
     cy.get('[data-cy="portfolio"]').should("have.length", 1);
-  });
-
+  }),
   it("creates a portfolio and confirms the saved status", () => {
     // The create POST resolves after a short delay; the UI shows "Saving…" then
     // "Saved".

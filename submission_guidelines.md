@@ -17,12 +17,12 @@ If your repo is private, add these reviewers as collaborators:
 
 ## Checklist before you send
 
-- [ ] `npm install && npx cypress install && npm test` runs green on a clean clone
-- [ ] `FINDINGS.md` documents all three Part 1 issues
+- [x] `npm install && npx cypress install && npm test` runs green on a clean clone
+- [x] `FINDINGS.md` documents all three Part 1 issues
 - [ ] Part 2a helper is committed and used in at least one test
 - [ ] `DESIGN.md` answers the CI + alerting questions
 - [ ] `SUBMISSION.md` has your time log
-- [ ] `AI_USAGE.md` is filled in
+- [x] `AI_USAGE.md` is filled in
 
 ## Time management
 

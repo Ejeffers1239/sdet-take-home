@@ -27,3 +27,5 @@ Document each issue you found and fixed. Add or remove sections as needed
 ## Anything else you noticed
 
 The application is doing a lot of math at runtime when rendering profiles (specifically in the profiles' serialize function). Having derived values like P&L calculated only at profile creation and saved as part of the profile object would make the page render slighly faster, as well as better seperate the model from the view. The drawback is that if these values are highly dynamic they may not always be up-to-date. It also requires slightly more memory usage. The ideal solution is some implementation of materialized views, but that's far more complicated than the scope of this exercise.
+
+An implementation of contract creation on mocks woud make the integration more robust as well. This is also out of scope for the exercise.
