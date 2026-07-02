@@ -19,9 +19,9 @@ If your repo is private, add these reviewers as collaborators:
 
 - [x] `npm install && npx cypress install && npm test` runs green on a clean clone
 - [x] `FINDINGS.md` documents all three Part 1 issues
-- [ ] Part 2a helper is committed and used in at least one test
-- [ ] `DESIGN.md` answers the CI + alerting questions
-- [ ] `SUBMISSION.md` has your time log
+- [x] Part 2a helper is committed and used in at least one test
+- [x] `DESIGN.md` answers the CI + alerting questions
+- [x] `SUBMISSION.md` has your time log
 - [x] `AI_USAGE.md` is filled in
 
 ## Time management
